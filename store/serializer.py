@@ -1,7 +1,7 @@
 import collections
 from rest_framework import serializers
 from decimal import Decimal
-from .models import Collection, Product
+from .models import Collection, Product, Review
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -25,3 +25,9 @@ class CollectionSerilizer(serializers.ModelSerializer):
 
     def calaculate_collection_population(self, collection=Collection):
         return collection.collection.count()
+
+
+class ReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Review
+        fields = ['id', 'date', 'name', 'description', 'product']

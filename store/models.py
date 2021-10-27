@@ -105,7 +105,7 @@ class CartItem(models.Model):
     quantity = models.PositiveSmallIntegerField()
 
 
-class review(models.Modelm):
+class Review(models.Modelm):
     product = models.ForeignKey(
         Product, on_delete=models.CASCADE, related_name='reviews')
     name = models.CharField(max_length=255)
