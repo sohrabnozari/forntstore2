@@ -1,3 +1,4 @@
+from django.db.models import query
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from rest_framework import serializers, status
@@ -6,12 +7,12 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
-from .serializer import ProductSerializer, CollectionSerilizer
-from .models import Product, Collection
+from .serializer import ProductSerializer, CollectionSerilizer, ReviewSerializer
+from .models import Product, Collection, Review
 
 
 class ProductViewSet(ModelViewSet):
-    
+
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
@@ -35,3 +36,8 @@ class CollectionViewSet(ModelViewSet):
             return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
         collection.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class ReviewViewSet(ModelViewSet):
+    queryset = Review.objects.all()
+    serializers_class = ReviewSerializer
