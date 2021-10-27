@@ -1,5 +1,6 @@
+from django.db.models import lookups
 from django.urls import path
-from django.urls.conf import incluce
+from django.urls.conf import include
 from . import views
 from rest_framework.routers import DefaultRouter
 from rest_framework_nested import routers
@@ -10,7 +11,7 @@ router.register('products', views.ProductViewSet)
 router.register('collection', views.CollectionViewSet)
 
 product_router = routers.NestedDefaultRouter(
-    router, 'products', lookup='product')
+    router, 'products', lookups='product')
 product_router.register('reviews', views.ReviewViewSet,
                         basename='product-reviews')
 
