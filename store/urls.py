@@ -8,10 +8,10 @@ from rest_framework_nested import routers
 
 router = routers.DefaultRouter()
 router.register('products', views.ProductViewSet)
-router.register('collection', views.CollectionViewSet)
+router.register('collections', views.CollectionViewSet)
 
 product_router = routers.NestedDefaultRouter(
-    router, 'products')
+    router, 'products', lookup='product')
 product_router.register('reviews', views.ReviewViewSet,
                         basename='product-reviews')
 
