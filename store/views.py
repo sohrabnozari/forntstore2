@@ -9,10 +9,10 @@ from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.filters import SearchFilter
-from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin,DestroyModelMixin
+from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, DestroyModelMixin
 from .filters import ProductFilter
-from .serializer import CartSerializer, ProductSerializer, CollectionSerilizer, ReviewSerializer
-from .models import Product, Collection, Review, Cart
+from .serializer import CartItemSerializer, CartSerializer, ProductSerializer, CollectionSerilizer, ReviewSerializer
+from .models import CartItem, Product, Collection, Review, Cart
 
 
 class ProductViewSet(ModelViewSet):
@@ -55,6 +55,13 @@ class ReviewViewSet(ModelViewSet):
 # ----------------------------------------------------------------------------
 
 
-class CartViewSet(CreateModelMixin, RetrieveModelMixin,DestroyModelMixin, GenericViewSet):
+class CartViewSet(CreateModelMixin, RetrieveModelMixin, DestroyModelMixin, GenericViewSet):
     queryset = Cart.objects.prefetch_related('items__product').all()
     serializer_class = CartSerializer
+
+
+class CartItemViewSet(ModelViewSet):
+    serializer_class = CartItemSerializer
+
+    def get_queryset(self):
+        return CartItem.objects.filter(cart_id=self.kwargs['cart_pk']).select_related('product')
