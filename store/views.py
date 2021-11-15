@@ -11,7 +11,7 @@ from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIV
 from rest_framework.filters import SearchFilter
 from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, DestroyModelMixin
 from .filters import ProductFilter
-from .serializer import AddCartItemSerializer, CartItemSerializer, CartSerializer, ProductSerializer, CollectionSerilizer, ReviewSerializer
+from .serializer import AddCartItemSerializer, CartItemSerializer, CartSerializer, ProductSerializer, CollectionSerilizer, ReviewSerializer, UpdateCartItemSerializer
 from .models import CartItem, Product, Collection, Review, Cart
 
 
@@ -61,13 +61,17 @@ class CartViewSet(CreateModelMixin, RetrieveModelMixin, DestroyModelMixin, Gener
 
 
 class CartItemViewSet(ModelViewSet):
+    http_method_names = ['get', 'post', 'patch', 'delete']
+
     def get_serializer_class(self):
-        if self.request.method=='POST':
+        if self.request.method == 'POST':
             return AddCartItemSerializer
+        elif self.request.method == 'PATCH':
+            return UpdateCartItemSerializer
         return CartItemSerializer
 
     def get_queryset(self):
         return CartItem.objects.filter(cart_id=self.kwargs['cart_pk']).select_related('product')
 
     def get_serializer_contex(self):
-        return {'cart_id':self.kwargs['cart_pk']}
+        return {'cart_id': self.kwargs['cart_pk']}
